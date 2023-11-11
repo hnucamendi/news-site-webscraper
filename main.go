@@ -4,28 +4,18 @@ import (
 	"fmt"
 
 	"github.com/gocolly/colly/v2"
+	"github.com/hnucamendi/ws-colly_lambda/scrape"
 )
 
 func main() {
-	c := colly.NewCollector()
-	// s := scrape.NewScrape()
+	c := colly.NewCollector(colly.Async(true))
+	s := scrape.NewScrape()
 
-	// if err := s.ScrapeTopHeadLines(c); err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	//.container_lead-package .cnn .lazy
-	c.OnHTML(".container", func(e *colly.HTMLElement) {
-		t := map[string]string{
-			"Title":       e.ChildText(".container__title_url-text"),
-			"Description": e.ChildText(".container__headline-text"),
-		}
-		fmt.Println(t)
-	})
-
-	if err := c.Visit("https://www.cnn.com"); err != nil {
+	if err := s.ScrapeTopHeadLines(c); err != nil {
 		fmt.Println(err)
 	}
 
-	// fmt.Println(s.TopHeadlines)
+	// for i, v := range s.TopHeadlines {
+	// 	fmt.Println(v.NewsSites[i])
+	// }
 }
