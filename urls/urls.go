@@ -6,7 +6,7 @@ var URLS map[string]string = map[string]string{
 	"nytimes":            "https://www.nytimes.com/",
 	"nbcnews":            "https://www.nbcnews.com/",
 	"cbsnews":            "https://www.cbsnews.com/",
-	"vice":               "https://www.vice.com/en",
+	"vice":               "https://www.vice.com/en/section/news",
 	"cnbc":               "https://www.cnbc.com/",
 	"forbes":             "https://www.forbes.com/",
 	"espn":               "https://www.espn.com/",
