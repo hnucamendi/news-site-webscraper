@@ -2,7 +2,10 @@ module github.com/hnucamendi/ws-colly_lambda
 
 go 1.21.4
 
-require github.com/gocolly/colly/v2 v2.0.0
+require (
+	github.com/aws/aws-lambda-go v1.41.0
+	github.com/gocolly/colly/v2 v2.0.0
+)
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.0 // indirect

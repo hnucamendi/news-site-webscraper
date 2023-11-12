@@ -13,6 +13,12 @@ github.com/antchfx/xmlquery
 # github.com/antchfx/xpath v1.0.0
 ## explicit
 github.com/antchfx/xpath
+# github.com/aws/aws-lambda-go v1.41.0
+## explicit; go 1.18
+github.com/aws/aws-lambda-go/lambda
+github.com/aws/aws-lambda-go/lambda/handlertrace
+github.com/aws/aws-lambda-go/lambda/messages
+github.com/aws/aws-lambda-go/lambdacontext
 # github.com/gobwas/glob v0.2.3
 ## explicit
 github.com/gobwas/glob

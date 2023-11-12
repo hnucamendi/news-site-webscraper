@@ -123,7 +123,7 @@ func NewScrape() *Scrape {
 	return s
 }
 
-func (s *Scrape) ScrapeTopHeadLines(c *colly.Collector, cfg *ScrapeConfig) error {
+func (s *Scrape) ScrapeTopHeadLines(c *colly.Collector, cfg *ScrapeConfig) (string, error) {
 	c.OnHTML(cfg.Containers.TopHeadlinesContainer, func(e *colly.HTMLElement) {
 		// w := io.Writer(os.Stdout)
 		// if err := html.Render(w, e.DOM.Nodes[0]); err != nil {
@@ -169,10 +169,8 @@ func (s *Scrape) ScrapeTopHeadLines(c *colly.Collector, cfg *ScrapeConfig) error
 
 	bytes, err := json.Marshal(s.NewsSite)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	fmt.Println(string(bytes))
-
-	return nil
+	return string(bytes), nil
 }
