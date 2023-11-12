@@ -8,10 +8,10 @@ import (
 )
 
 func main() {
-	c := colly.NewCollector(colly.Async(true))
+	c := colly.NewCollector(colly.Async(true), colly.UserAgent("ws-colly"))
 	s := scrape.NewScrape()
 
-	if err := s.ScrapeTopHeadLines(c, scrape.ViceConfig()); err != nil {
+	if err := s.ScrapeTopHeadLines(c, scrape.CNNConfig()); err != nil {
 		fmt.Println(err)
 	}
 }

@@ -1,1 +1,72 @@
-&{div ThelatestLoading! Loading!  [{ class section-page-latest}] 0x1400021e780 0x1400003e040 0x140002840c0 0}
+{
+  "Site": "cnn",
+  "URL": "https://www.cnn.com",
+  "TopHeadlines": [
+    {
+      "Title": "Netanyahu refuses to say if he'll take responsibility for Oct. 7 attacks",
+      "Description": "The Israeli prime minister tells CNN that there will be time for such ‘difficult’ questions once the war is overNetanyahu seems to rule out giving Palestinian Authority control in post-war GazaNetanyahu shares 3 things to understand about the warRed Cross unable to confirm any evacuations from Al-Shifa hospitalGaza doctors are desperate for help. Americans are stepping upDo Palestinian lives matter to the world?In pictures: Israel at war with Hamas4 former and current LA sheriff’s employees died by suicide in less than 24 hoursAn off-duty US Park Police officer shot and killed another officer. He didn’t think the gun was loaded, police saidThe night train revolution has been hailed as an alternative to airplanes. Here’s how that’s goingThousands of Greenland’s glaciers are rapidly shrinking. Before-and-after photos reveal the alarming changesWatch the latest CNN Headlines‘My mom still makes my bed’: Giants quarterback Tommy DeVito still enjoying home comforts ahead of first NFL startAlec Baldwin makes surprise return to ‘SNL’WaPo cartoonist responds to criticism from Hamas ‘human shields’ cartoonPrince William is trying to reinvent the royal roleRelationship expert: ‘We can live without sex but we can’t live without touch’Former first-round NFL draft pick D.J. Hayden among 6 killed in car crashEx-GOP senator was sexually assaulted while jogging. Hear how she confronted her attacker",
+      "AritcleURL": "https://www.cnn.com/middleeast/live-news/israel-hamas-war-gaza-news-11-12-23",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/231112090434-01-benjamin-netanyahu-cnn-1112.jpg?c=16x9\u0026q=h_720,w_1280,c_fill"
+    },
+    {
+      "Title": "",
+      "Description": "Marjorie Taylor Greene botches the explanationHear Trump praise dictators at New Hampshire rallyFour deaf people died in the Lewiston mass shooting. The tragedy highlights their unique vulnerabilities during a crisisPope removes outspoken conservative Texas bishop after investigationHe’s second in line to the presidency. Financially, he’s just getting byWhy I’m not going to have childrenMeteor shower’s peak could produce fireballs in the night skyUkraine releases drone video purporting to show massive losses of Russian weaponsThe average score for this week’s news quiz is 7.4. Think you can do better?McCarthy weighs leaving the House with his GOP foes on his mindRNC Chairwoman acknowledges GOP frustration after election lossesHow Trump’s fraud trial defense may unfoldSee the moment Trump confuses name of the current presidentRFK Jr. is polling at historic levels for an independentSpeaker Johnson unveils House GOP’s two-step plan to avert government shutdownHow should we dress for ‘fire weather’?Could the West Bank “model” work for Gaza?",
+      "AritcleURL": "https://us.cnn.com/2023/11/12/opinions/marjorie-taylor-greenes-faulty-explanation-galant/index.html",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/231112102557-kevin-mccarthy-1024.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    },
+    {
+      "Title": "",
+      "Description": "Lowering salt intake by 1 teaspoon works as well as drugs, study says6 science-backed ways of managing seasonal affective disorderHow breast implants helped save a man with severe lung damagePeople around the world are celebrating Diwali this weekend. Here’s what to know about the festivalWhy this common, but overlooked ‘mid-size’ body type is taking over TikTokF1 car comes apart during crash. Green Bay defender turns LA QB’s helmet with face mask grab. The week in photosNFL Week 10: A rematch of familiar foes and a rookie quarterback seeking to end a winning streakThe Fed is terrified Americans could get used to high inflation. It may already be happening.The US minimum wage has been $7.25 since 2009. Here’s what that meansThis was a massive week for AI",
+      "AritcleURL": "https://us.cnn.com/2023/11/11/health/low-salt-diet-or-medication-wellness/index.html",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/231110163304-salt-teaspoon-stock-image-restricted.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    },
+    {
+      "Title": "Best-in-class\n\t\n\nGift Guides\n\t\n\nInflation-busting deals",
+      "Description": "After testing a dozen leaf blowers, these two stood outYes, robot mops are a thing. These 3 are worth your moneyYeti has launched the Rambler Wine Chiller just in time for holiday entertainingHow to deal with your stress this year, according to expertsOprah just dropped her 2023 Favorite Things gift guideThe 50 most unique gifts to give (and get) this holiday seasonThe 61 best gifts for men that we know he’ll loveA ton of Lego Advent calendars just hit their lowest price everThe Macy’s early Black Friday sale is here — these are the best deals to shopThe best gifts to pick up on your next Target runHere are the 20 best REI Gear Up Get Out deals to shop ahead of winterThese are the 10 best products on sale at Amazon this weekA 4-pack of Apple AirTags is on sale at Amazon todayBest Buy has early Black Friday deals on Apple products, TVs and moreThese are the best sales to shop this weekend",
+      "AritcleURL": "https://www.cnn.com/cnn-underscored",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/best-leaf-blowers-lead-cnnu.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    },
+    {
+      "Title": "Opinion\n\t\n\nEntertainment",
+      "Description": "Barbra Streisand is giving us a wake-up callStop shaming parentsThis penalty could hurt Trump more than prison timeBiden is in troubleDoorDash doesn’t understand the definition of a tipWere Covid-19 lockdowns a mistake?Timothée Chalamet raps about his ‘baby face’ in ‘SNL’ monologueJamie Lee Curtis heavily teases ‘Freaky Friday 2’ team-up with Lindsay LohanKeke Palmer granted temporary sole custody of her sonDe Niro’s production company ordered to pay ex-employee $1.2 million in civil caseGrammy nominations 2024: See the full list of nominees",
+      "AritcleURL": "https://www.cnn.com/opinions",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/gettyimages-966542616.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    },
+    {
+      "Title": "Travel\n\t\n\nStyle",
+      "Description": "Why this business class innovation may have been a mistakeAir Canada apologizes, pledges to improve accessibilityThe untouched skiing paradise on the edge of EuropeThis European country might add a ‘green tax’ to airplane ticketsPlane takes off with missing window panes as crew fails to spot damage100 passengers injured as ship lurches to a haltA woman with the ‘it’ factor: The enduring appeal of Carolyn Bessette Kennedy‘Bleu Royal’ diamond fetches almost $44 millionPicasso masterpiece depicting his young mistress sells for $139 million at auctionShakespeare portrait sent to edge of space to celebrate 400 years since ‘First Folio’Designer apologizes for using live butterflies in ‘terrarium’ dresses‘Be prepared for all outcomes’: Inside the saga of a supervolcano that’s waking upWhat you need to know about the FDA’s proposed ban of brominated vegetable oilSex therapist Dr. Ruth Westheimer appointed New York state’s first loneliness ambassadorScientists create chimeric monkey with two sets of DNABest ways to counter the harmful effects of sitting, according to research",
+      "AritcleURL": "https://www.cnn.com/travel",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/a330neo-upper-0003.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    },
+    {
+      "Title": "World\n\t\n\nPolitics\n\t\n\nUS",
+      "Description": "Gaza hospital in ‘catastrophic situation,’ amid heavy fighting nearby, health officials sayUS military aircraft crashes in training accident in eastern Mediterranean SeaPro-Russian official assassinated and Black Sea battles: Here’s what to know about the latest in UkraineDetained, missing or under investigation: Business leaders in China face ‘aggressive’ crackdownDefying Democratic pushback, Dean Phillips vows to invest millions in his primary challenge to BidenFBI seizes New York City Mayor Eric Adams’ phones as part of federal investigation into fundraisingFederal appeals court sets deadline for Louisiana Legislature to decide whether to change challenged congressional mapFormer New Jersey Gov. Jim McGreevey seeks mayoral run nearly 20 years after leaving officeThe water turns shocking shade of magenta in this Hawaii refugeShe led the National School Walkout after the Parkland mass shooting. Then she left AmericaSuspect in killing of Detroit synagogue leader Samantha Woll is released from custody, lawyer saysFirst atmospheric river storm of the season targets California next week",
+      "AritcleURL": "https://www.cnn.com/world",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/231111003156-01-al-shifa-hospital-gaza-111023.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    },
+    {
+      "Title": "CNN podcasts\n\t\n\nSports",
+      "Description": "How should we dress for ‘fire weather’?Could the West Bank “model” work for Gaza?The US Army’s recruitment challengeDems win but Biden trailsWhy long Covid is more than just ‘brain fog’Obama’s message of hope – 15 years laterToxic foam coats sacred river near New Delhi as Indian capital battles hazardous pollutionThe world is planning to blow the fossil fuels production limit that would keep a lid on global heating, report saysClimate change is impacting the home insurance industry and damaging the housing marketThe planet is heating up faster than predicted, says scientist who sounded climate alarm in the 1980sExpert: Why Trump went ‘ballistic’ after learning maid may be questionedNBA player struck by vehicleTakeaways from CFB Week 11Aspinall KOs Pavlovich Michigan remains undefeated after win vs. Penn StateGiants rookie QB aays he still lives with parents",
+      "AritcleURL": "https://www.cnn.com/audio",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/one-thing-john-vaillant.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    },
+    {
+      "Title": "Represented\n\t\n\nCNN Heroes Top 10",
+      "Description": "Australian surfer officially breaks world record after taming giant waveNaomi Osaka set to return to tennis less than six months after giving birthAmerica’s oldest zoo has a new history-making CEOThis CNN Hero offers judgment-free veterinary care for the pets of those experiencing homelessnessMeet the 2023 Top 10 CNN HeroesClick here to cast your vote for CNN Hero of the Year",
+      "AritcleURL": "https://www.cnn.com/us/represented-by-cnn",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/231109095535-laura-enever-041721.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    },
+    {
+      "Title": "",
+      "Description": "These rescued farm animals are getting a second chance at lifeHaunting underwater photos portray climate change in a new wayThe week in 33 photosThis Black-owned ballet school empowers young dancers",
+      "AritcleURL": "https://www.cnn.com/interactive/2023/10/world/animal-sanctuaries-cnnphotos/",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/231020232609-01-animal-sanctuaries-cnnphotos.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    },
+    {
+      "Title": "",
+      "Description": "New Census projections reveal when the US population may start decliningBeyoncé drops new worldwide trailer for ‘Renaissance’How a nullified election in Connecticut became a rallying cry for Trump supportersBritish couple died on vacation after adjoining room fumigated for bed bugsInside the saga of a supervolcano that’s waking upSex therapist Dr. Ruth Westheimer appointed New York state’s first loneliness ambassadorDo you tip at a restaurant like Chipotle? Here’s what a survey foundNYC mayor says he will continue to cooperate with investigation after FBI seizes his phonesEscape crowds at these affordable alternatives to travel hot spots",
+      "AritcleURL": "https://us.cnn.com/2023/11/09/us/us-population-decline-census-projections-cec/index.html",
+      "ImageURL": "https://media.cnn.com/api/v1/images/stellar/prod/231109135750-01-us-census-decline.jpg?c=16x9\u0026q=h_438,w_780,c_fill"
+    }
+  ]
+}

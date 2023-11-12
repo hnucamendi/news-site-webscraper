@@ -3,13 +3,10 @@ package scrape
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"os"
 	"strings"
+	"time"
 
 	"github.com/gocolly/colly/v2"
-	"github.com/hnucamendi/ws-colly_lambda/urls"
-	"golang.org/x/net/html"
 )
 
 type SiteConfigContainer struct {
@@ -27,6 +24,7 @@ type ScrapeConfig struct {
 	URLChopped       bool
 	Pagination       bool
 	PaginationQuery  string
+	WaitForLoad      bool
 	Containers       *SiteConfigContainer
 }
 
@@ -42,14 +40,40 @@ type NewsSite struct {
 }
 
 type TopHeadlines struct {
-	NewsArticle []*NewsArticle
-}
-
-type NewsArticle struct {
 	Title       string
 	Description string
 	AritcleURL  string
 	ImageURL    string
+}
+
+var urls map[string]string = map[string]string{
+	"google":             "https://www.google.com",
+	"cnn":                "https://www.cnn.com",
+	"nytimes":            "https://www.nytimes.com/",
+	"nbcnews":            "https://www.nbcnews.com/",
+	"cbsnews":            "https://www.cbsnews.com/",
+	"vice":               "https://www.vice.com/en/section/news",
+	"cnbc":               "https://www.cnbc.com/",
+	"forbes":             "https://www.forbes.com/",
+	"espn":               "https://www.espn.com/",
+	"foxnews":            "https://www.foxnews.com/",
+	"usatoday":           "https://www.usatoday.com/",
+	"bbc":                "https://www.bbc.com/news/world/us_and_canada",
+	"washingtonpost":     "https://www.washingtonpost.com/",
+	"latimes":            "https://www.latimes.com/",
+	"npr":                "https://www.npr.org/",
+	"wsj":                "https://www.wsj.com/us-news",
+	"theguardian":        "https://www.theguardian.com/us",
+	"bloomberg":          "https://www.bloomberg.com/",
+	"reuters":            "https://www.reuters.com/world/us/",
+	"usnews":             "https://www.usnews.com/",
+	"nationalgeographic": "https://www.nationalgeographic.com/",
+	"apnews":             "https://www.apnews.com/us-news",
+	"yahoo":              "https://news.yahoo.com/",
+}
+
+func Sleep(t int, d time.Duration) {
+	time.Sleep(time.Duration(t) * d)
 }
 
 func CNNConfig() *ScrapeConfig {
@@ -59,10 +83,11 @@ func CNNConfig() *ScrapeConfig {
 		PaginationQuery:  "",
 		URLQuery:         "a[href]",
 		ImageURLQuery:    "img[src]",
-		URL:              urls.URLS["cnn"],
+		URL:              urls["cnn"],
 		URLPrefix:        "https://us.cnn.com",
 		URLChopped:       true,
 		Pagination:       false,
+		WaitForLoad:      false,
 		Containers: &SiteConfigContainer{
 			TopHeadlinesContainer: ".zone__items",
 		},
@@ -73,15 +98,16 @@ func CNNConfig() *ScrapeConfig {
 
 func ViceConfig() *ScrapeConfig {
 	sc := &ScrapeConfig{
-		TitleQuery:       ".vice-card__content",
+		TitleQuery:       ".latest-feed",
 		DescriptionQuery: ".vice-card-dek",
 		PaginationQuery:  ".loading-lockup-infinite__button",
 		URLQuery:         "a[href]",
 		ImageURLQuery:    "picture[source]",
-		URL:              urls.URLS["vice"],
+		URL:              urls["vice"],
 		URLChopped:       false,
 		URLPrefix:        "",
 		Pagination:       false,
+		WaitForLoad:      true,
 		Containers: &SiteConfigContainer{
 			// TopHeadlinesContainer: ".container",
 			TopHeadlinesContainer: "body",
@@ -93,20 +119,19 @@ func ViceConfig() *ScrapeConfig {
 
 func NewScrape() *Scrape {
 	s := &Scrape{}
-	s.URLS = urls.URLS
+	s.URLS = urls
 	return s
 }
 
 func (s *Scrape) ScrapeTopHeadLines(c *colly.Collector, cfg *ScrapeConfig) error {
 	c.OnHTML(cfg.Containers.TopHeadlinesContainer, func(e *colly.HTMLElement) {
-		// fmt.Println(e)
-		w := io.Writer(os.Stdout)
-		if err := html.Render(w, e.DOM.Nodes[0]); err != nil {
-			fmt.Println(err)
-			return
-		}
+		// w := io.Writer(os.Stdout)
+		// if err := html.Render(w, e.DOM.Nodes[0]); err != nil {
+		// 	fmt.Println(err)
+		// 	return
+		// }
 
-		fmt.Println(w)
+		// fmt.Println(w)
 
 		title := e.ChildText(cfg.TitleQuery)
 		description := e.ChildText(cfg.DescriptionQuery)
@@ -120,14 +145,10 @@ func (s *Scrape) ScrapeTopHeadLines(c *colly.Collector, cfg *ScrapeConfig) error
 		}
 
 		s.NewsSite.TopHeadlines = append(s.NewsSite.TopHeadlines, &TopHeadlines{
-			NewsArticle: []*NewsArticle{
-				{
-					Title:       title,
-					Description: description,
-					AritcleURL:  articleURL,
-					ImageURL:    imageURL,
-				},
-			},
+			Title:       title,
+			Description: description,
+			AritcleURL:  articleURL,
+			ImageURL:    imageURL,
 		})
 	})
 
@@ -146,12 +167,12 @@ func (s *Scrape) ScrapeTopHeadLines(c *colly.Collector, cfg *ScrapeConfig) error
 	c.Visit(cfg.URL)
 	c.Wait()
 
-	_, err := json.Marshal(s.NewsSite)
+	bytes, err := json.Marshal(s.NewsSite)
 	if err != nil {
 		return err
 	}
 
-	// fmt.Println(string(bytes))
+	fmt.Println(string(bytes))
 
 	return nil
 }
