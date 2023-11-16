@@ -1,7 +1,7 @@
-resource "aws_s3_bucket" "ws_colly_lambda_zip_bucket" {
-  bucket = "ws-colly-lambda-zip-bucket"
+resource "aws_s3_bucket" "lambda_package_zip_bucket" {
+  bucket = "lambda-package-zip-bucket"
   tags = {
-    Name = "ws-colly-lambda-zip-bucket"
+    Name = "lambda-package-zip-bucket"
     Environment = "production"
   }
 }
