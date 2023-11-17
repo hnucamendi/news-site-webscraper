@@ -76,9 +76,14 @@ resource "aws_iam_role_policy_attachment" "ws_colly_lambda_sqs_send_message_poli
   policy_arn = aws_iam_policy.ws_colly_lambda_sqs_send_message_policy.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ws_colly_lambda_sqs_policy_attachment" {
+# resource "aws_iam_role_policy_attachment" "ws_colly_lambda_sqs_policy_attachment" {
+#   role       = aws_iam_role.ws_colly_lambda_role.name
+#   policy_arn =  "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
+# }
+
+resource "aws_iam_role_policy_attachment" "ws_colly_lambda_cloudwatch_policy_attachment" {
   role       = aws_iam_role.ws_colly_lambda_role.name
-  policy_arn =  "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
+  policy_arn =  "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_sqs_role_policy" {

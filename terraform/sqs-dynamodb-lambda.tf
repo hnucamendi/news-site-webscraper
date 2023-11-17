@@ -38,6 +38,10 @@ resource "aws_iam_policy" "lambda_sqs_receive_message_policy" {
     ]
   })
 }
+resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_policy_attachment" {
+  role       = aws_iam_role.lambda_assume_role.name
+  policy_arn =  "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
 
 resource "aws_iam_role_policy_attachment" "lambda_sqs_receive_message_policy_attachment" {
   role       = aws_iam_role.lambda_assume_role.name
