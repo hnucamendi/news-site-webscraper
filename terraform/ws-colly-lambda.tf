@@ -24,11 +24,13 @@ resource "aws_iam_policy" "ws_colly_lambda_sqs_send_message_policy" {
       {
         Action = [
           "sqs:SendMessage",
+          "ssm:GetParameter"
         ],
         Effect   = "Allow",
         Resource = [
           aws_sqs_queue.ws_colly_sqs_queue.arn,
-          aws_sqs_queue.ws_colly_sqs_dead_queue.arn
+          aws_sqs_queue.ws_colly_sqs_dead_queue.arn,
+          aws_ssm_parameter.sqs-url.arn,
         ]
       },
     ]
@@ -79,10 +81,10 @@ resource "aws_iam_role_policy_attachment" "ws_colly_lambda_sqs_policy_attachment
   policy_arn =  "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
 }
 
-# resource "aws_iam_role_policy_attachment" "lambda_sqs_role_policy" {
-#   role       = aws_iam_role.ws_colly_lambda_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
-# }
+resource "aws_iam_role_policy_attachment" "lambda_sqs_role_policy" {
+  role       = aws_iam_role.ws_colly_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
+}
 
 resource "aws_lambda_function_event_invoke_config" "ws_colly_lambda_event_invoke_config" {
   function_name = aws_lambda_function.ws_colly_lambda.function_name
