@@ -27,7 +27,7 @@ resource "aws_iam_policy" "lambda_sqs_receive_message_policy" {
           "sqs:DeleteMessage",
           "sqs:GetQueueAttributes",
           "ssm:GetParameter",
-          "dynamodb:PutItem",
+          "dynamodb:*",
         ],
         Effect   = "Allow",
         Resource = [

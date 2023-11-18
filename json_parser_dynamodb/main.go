@@ -60,14 +60,15 @@ func uploadToDynamo() error {
 
 		// Put item in DynamoDB
 		input := &dynamodb.PutItemInput{
-			Item:      item,
-			TableName: aws.String("ws-colly-dynamo-table"),
+			Item:         item,
+			TableName:    aws.String("ws-colly-dynamo-table"),
+			ReturnValues: aws.String("ALL_OLD"),
 		}
-
-		_, err := svc.PutItem(input)
+		r, err := svc.PutItem(input)
 		if err != nil {
 			return err
 		}
+		fmt.Printf("PutItem Return: %v\n", r)
 	}
 
 	return err
