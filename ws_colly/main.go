@@ -43,7 +43,25 @@ func HandleRequest() (string, error) {
 	c := colly.NewCollector(colly.Async(true), colly.UserAgent("ws-colly"))
 	s := scrape.NewScrape()
 
-	json, err := s.ScrapeTopHeadLines(c, scrape.CNNConfig())
+	cfg := &map[string]*scrape.ScrapeConfig{
+		"cnn": {
+			TitleQuery:       ".container__title_url-text",
+			DescriptionQuery: ".container__headline-text",
+			PaginationQuery:  "",
+			URLQuery:         "a[href]",
+			ImageURLQuery:    "img[src]",
+			URL:              scrape.URLs["cnn"],
+			URLPrefix:        "https://us.cnn.com",
+			URLChopped:       true,
+			Pagination:       false,
+			WaitForLoad:      false,
+			Containers: &scrape.SiteConfigContainer{
+				TopHeadlinesContainer: ".zone__items",
+			},
+		},
+	}
+
+	json, err := s.ScrapeTopHeadLines(c, *cfg)
 	if err != nil {
 		fmt.Println(err)
 		return "", err

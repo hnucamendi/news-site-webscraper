@@ -3,10 +3,8 @@ package scrape
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
-	"time"
-
 	"github.com/gocolly/colly/v2"
+	"strings"
 )
 
 type SiteConfigContainer struct {
@@ -70,10 +68,6 @@ var urls map[string]string = map[string]string{
 	"nationalgeographic": "https://www.nationalgeographic.com/",
 	"apnews":             "https://www.apnews.com/us-news",
 	"yahoo":              "https://news.yahoo.com/",
-}
-
-func Sleep(t int, d time.Duration) {
-	time.Sleep(time.Duration(t) * d)
 }
 
 func CNNConfig() *ScrapeConfig {
