@@ -91,7 +91,9 @@ func (c *client) uploadToDynamo(resp *sqs.ReceiveMessageOutput) error {
 }
 
 func HandleRequest() error {
+	fmt.Println("Starting Lambda...")
 	c := initClient()
+	fmt.Printf("Client: %v\n", c)
 
 	msgs, err := c.receiveMessage()
 	if err != nil {
@@ -99,9 +101,13 @@ func HandleRequest() error {
 		return err
 	}
 
+	fmt.Println("Messages: ", msgs)
+
 	if err := c.uploadToDynamo(msgs); err != nil {
 		fmt.Printf("Got error calling uploadToDynamo: %v", err)
 	}
+	fmt.Printf("Error: %v\n", err)
+	fmt.Printf("Finished Lambda...")
 
 	return nil
 }
