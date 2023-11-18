@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/aws/aws-lambda-go/lambda"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -11,50 +11,65 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-func uploadToDynamo() error {
-	sess := session.Must(session.NewSession(&aws.Config{
+type client struct {
+	sqs      *sqs.SQS
+	dynamodb *dynamodb.DynamoDB
+	ssm      *ssm.SSM
+}
+
+func initClient() *client {
+	cl := &client{}
+
+	newSession := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String("us-east-1"),
 	}))
 
-	ssmSvc := ssm.New(sess)
+	cl.sqs = sqs.New(newSession)
+	cl.dynamodb = dynamodb.New(newSession)
+	cl.ssm = ssm.New(newSession)
 
-	param, err := ssmSvc.GetParameter(&ssm.GetParameterInput{
+	return cl
+}
+
+func (c *client) receiveMessage() (*sqs.ReceiveMessageOutput, error) {
+	param, err := c.ssm.GetParameter(&ssm.GetParameterInput{
 		Name:           aws.String("/lambda/prod/ws-colly/ws-colly-lambda-sqs-url"),
 		WithDecryption: aws.Bool(true),
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	queueURL := *param.Parameter.Value
 
-	sqsSvc := sqs.New(sess)
-
-	resp, err := sqsSvc.ReceiveMessage(&sqs.ReceiveMessageInput{
+	resp, err := c.sqs.ReceiveMessage(&sqs.ReceiveMessageInput{
 		QueueUrl: &queueURL,
 		AttributeNames: []*string{
 			aws.String("All"),
 		},
 	})
 	if err != nil {
-		return err
+		return resp, err
 	}
 
-	// Create DynamoDB client
-	svc := dynamodb.New(sess)
+	return resp, nil
+}
 
-	for _, message := range resp.Messages {
-		// Prepare item for DynamoDB
-		fmt.Printf("Message ID: %s\n", *message.MessageId)
+func (c *client) uploadToDynamo(resp *sqs.ReceiveMessageOutput) error {
+	for i, message := range resp.Messages {
+		fmt.Printf("%v: Message ID: %v\n", i+1, *message.MessageId)
+	}
+
+	for _, msg := range resp.Messages {
 		item := map[string]*dynamodb.AttributeValue{
 			"ID": {
-				S: aws.String(*message.MessageId),
+				S: msg.MessageId,
 			},
 			"Body": {
-				S: aws.String(*message.Body),
+				S: msg.Body,
 			},
 			"TimeStamp": {
-				S: aws.String(*message.Attributes["SentTimestamp"]),
+				S: msg.Attributes["SentTimestamp"],
 			},
 		}
 
@@ -64,20 +79,28 @@ func uploadToDynamo() error {
 			TableName:    aws.String("ws-colly-dynamo-table"),
 			ReturnValues: aws.String("ALL_OLD"),
 		}
-		r, err := svc.PutItem(input)
+
+		r, err := c.dynamodb.PutItem(input)
 		if err != nil {
+			fmt.Printf("Got error calling PutItem: %v", err)
 			return err
 		}
 		fmt.Printf("PutItem Return: %v\n", r)
 	}
-
-	return err
+	return nil
 }
 
 func HandleRequest() error {
-	if err := uploadToDynamo(); err != nil {
-		fmt.Println(err)
+	c := initClient()
+
+	msgs, err := c.receiveMessage()
+	if err != nil {
+		fmt.Printf("Got error calling ReceiveMessage: %v", err)
 		return err
+	}
+
+	if err := c.uploadToDynamo(msgs); err != nil {
+		fmt.Printf("Got error calling uploadToDynamo: %v", err)
 	}
 
 	return nil
@@ -85,4 +108,7 @@ func HandleRequest() error {
 
 func main() {
 	lambda.Start(HandleRequest)
+	//if err := HandleRequest(); err != nil {
+	//	fmt.Println(err)
+	//}
 }
