@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
+	"log"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -57,7 +57,7 @@ func (c *client) receiveMessage() (*sqs.ReceiveMessageOutput, error) {
 
 func (c *client) uploadToDynamo(resp *sqs.ReceiveMessageOutput) error {
 	for i, message := range resp.Messages {
-		fmt.Printf("%v: Message ID: %v\n", i+1, *message.MessageId)
+		log.Printf("%v: Message ID: %v\n", i+1, *message.MessageId)
 	}
 
 	for _, msg := range resp.Messages {
@@ -82,40 +82,37 @@ func (c *client) uploadToDynamo(resp *sqs.ReceiveMessageOutput) error {
 
 		r, err := c.dynamodb.PutItem(input)
 		if err != nil {
-			fmt.Printf("Got error calling PutItem: %v", err)
+			log.Printf("Got error calling PutItem: %v", err)
 			return err
 		}
-		fmt.Printf("PutItem Return: %v\n", r)
+		log.Printf("PutItem Return: %v\n", r)
 	}
 	return nil
 }
 
 func HandleRequest() (string, error) {
-	fmt.Println("Starting Lambda...")
+	log.Println("Starting Lambda...")
 	c := initClient()
-	fmt.Printf("Client: %v\n", c)
+	log.Printf("Client: %v\n", c)
 
 	msgs, err := c.receiveMessage()
 	if err != nil {
-		fmt.Printf("Got error calling ReceiveMessage: %v", err)
+		log.Printf("Got error calling ReceiveMessage: %v", err)
 		return "", err
 	}
 
-	fmt.Println("Messages: ", msgs)
+	log.Println("Messages: ", msgs)
 
 	if err := c.uploadToDynamo(msgs); err != nil {
-		fmt.Printf("Got error calling uploadToDynamo: %v", err)
+		log.Printf("Got error calling uploadToDynamo: %v", err)
 		return "", err
 	}
-	fmt.Printf("Error: %v\n", err)
-	fmt.Printf("Finished Lambda...")
+	log.Printf("Error: %v\n", err)
+	log.Printf("Finished Lambda...")
 
 	return "Is this working?", nil
 }
 
 func main() {
 	lambda.Start(HandleRequest)
-	//if err := HandleRequest(); err != nil {
-	//	fmt.Println(err)
-	//}
 }
