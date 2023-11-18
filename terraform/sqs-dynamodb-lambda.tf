@@ -27,12 +27,14 @@ resource "aws_iam_policy" "lambda_sqs_receive_message_policy" {
           "sqs:DeleteMessage",
           "sqs:GetQueueAttributes",
           "ssm:GetParameter",
+          "dynamodb:PutItem",
         ],
         Effect   = "Allow",
         Resource = [
           aws_sqs_queue.ws_colly_sqs_queue.arn,
           aws_sqs_queue.ws_colly_sqs_dead_queue.arn,
-          "arn:aws:ssm:us-east-1:531238205865:parameter/lambda/prod/ws-colly/ws-colly-lambda-sqs-url"
+          aws_ssm_parameter.sqs-url.arn,
+          aws_dynamodb_table.ws_colly_dynamo_table.arn,
         ]
       },
     ]

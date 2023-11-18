@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -9,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-func uploadToDynamo() (string, error) {
+func uploadToDynamo() error {
 	sess := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String("us-east-1"),
 	}))
@@ -21,7 +23,7 @@ func uploadToDynamo() (string, error) {
 		WithDecryption: aws.Bool(true),
 	})
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	queueURL := *param.Parameter.Value
@@ -35,7 +37,7 @@ func uploadToDynamo() (string, error) {
 		},
 	})
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	// Create DynamoDB client
@@ -43,6 +45,7 @@ func uploadToDynamo() (string, error) {
 
 	for _, message := range resp.Messages {
 		// Prepare item for DynamoDB
+		fmt.Printf("Message ID: %s\n", *message.MessageId)
 		item := map[string]*dynamodb.AttributeValue{
 			"ID": {
 				S: aws.String(*message.MessageId),
@@ -61,21 +64,22 @@ func uploadToDynamo() (string, error) {
 			TableName: aws.String("ws-colly-dynamo-table"),
 		}
 
-		_, err = svc.PutItem(input)
+		_, err := svc.PutItem(input)
 		if err != nil {
-			return "", err
+			return err
 		}
 	}
 
-	return resp.GoString(), err
+	return err
 }
 
-func HandleRequest() (string, error) {
-	msg, err := uploadToDynamo()
-	if err != nil {
-		return "", err
+func HandleRequest() error {
+	if err := uploadToDynamo(); err != nil {
+		fmt.Println(err)
+		return err
 	}
-	return msg, nil
+
+	return nil
 }
 
 func main() {
