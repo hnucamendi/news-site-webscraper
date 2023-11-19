@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f013f5b8-fc1e-4cfa-bfb6-f0312676bbd7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/bootstrap" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap.zip" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-    </list>
+    <list default="true" id="f013f5b8-fc1e-4cfa-bfb6-f0312676bbd7" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

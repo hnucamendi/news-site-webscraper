@@ -54,7 +54,7 @@ resource "aws_lambda_function" "ws_colly_lambda" {
 resource "aws_cloudwatch_event_rule" "ws_colly_lambda_daily_event" {
   name                = "ws-colly-lambda-daily-event"
   description         = "Fires every day"
-  schedule_expression = "rate(1 day)"
+  schedule_expression = "rate(8 hours)"
 }
 
 resource "aws_cloudwatch_event_target" "invoke_ws_colly_lambda_every_five_minutes" {
