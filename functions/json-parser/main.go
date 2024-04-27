@@ -1,7 +1,9 @@
+// Lambda to parse json from SQS queue and upload to dynamoDB
 package main
 
 import (
 	"fmt"
+
 	"github.com/aws/aws-lambda-go/lambda"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -17,18 +19,18 @@ type client struct {
 	ssm      *ssm.SSM
 }
 
-func initClient() *client {
-	cl := &client{}
+func initClients() *client {
+	c := &client{}
 
-	newSession := session.Must(session.NewSession(&aws.Config{
+	s := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String("us-east-1"),
 	}))
 
-	cl.sqs = sqs.New(newSession)
-	cl.dynamodb = dynamodb.New(newSession)
-	cl.ssm = ssm.New(newSession)
+	c.sqs = sqs.New(s)
+	c.dynamodb = dynamodb.New(s)
+	c.ssm = ssm.New(s)
 
-	return cl
+	return c
 }
 
 func (c *client) receiveMessage() (*sqs.ReceiveMessageOutput, error) {
@@ -55,12 +57,12 @@ func (c *client) receiveMessage() (*sqs.ReceiveMessageOutput, error) {
 	return resp, nil
 }
 
-func (c *client) uploadToDynamo(resp *sqs.ReceiveMessageOutput) error {
-	for i, message := range resp.Messages {
+func (c *client) uploadToDynamo(msgs *sqs.ReceiveMessageOutput) error {
+	for i, message := range msgs.Messages {
 		fmt.Printf("%v: Message ID: %v\n", i+1, *message.MessageId)
 	}
 
-	for _, msg := range resp.Messages {
+	for _, msg := range msgs.Messages {
 		item := map[string]*dynamodb.AttributeValue{
 			"ID": {
 				S: msg.MessageId,
@@ -90,32 +92,28 @@ func (c *client) uploadToDynamo(resp *sqs.ReceiveMessageOutput) error {
 	return nil
 }
 
-func HandleRequest() (string, error) {
-	fmt.Println("Starting Lambda...")
-	c := initClient()
+func HandleRequest() error {
+	c := initClients()
 	fmt.Printf("Client: %v\n", c)
 
 	msgs, err := c.receiveMessage()
 	if err != nil {
 		fmt.Printf("Got error calling ReceiveMessage: %v", err)
-		return "", err
+		return err
 	}
 
 	fmt.Println("Messages: ", msgs)
 
 	if err := c.uploadToDynamo(msgs); err != nil {
 		fmt.Printf("Got error calling uploadToDynamo: %v", err)
-		return "", err
+		return err
 	}
 	fmt.Printf("Error: %v\n", err)
 	fmt.Printf("Finished Lambda...")
 
-	return "Is this working?", nil
+	return nil
 }
 
 func main() {
 	lambda.Start(HandleRequest)
-	//if err := HandleRequest(); err != nil {
-	//	fmt.Println(err)
-	//}
 }

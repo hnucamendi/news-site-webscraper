@@ -1,50 +1,4 @@
-package scrape
-
-import (
-	"encoding/json"
-	"fmt"
-	"strings"
-	"time"
-
-	"github.com/gocolly/colly/v2"
-)
-
-type SiteConfigContainer struct {
-	TopHeadlinesContainer string
-}
-
-type ScrapeConfig struct {
-	TestQuery        func(...string) string
-	TitleQuery       string
-	DescriptionQuery string
-	URLQuery         string
-	ImageURLQuery    string
-	URL              string
-	URLPrefix        string
-	URLChopped       bool
-	Pagination       bool
-	PaginationQuery  string
-	WaitForLoad      bool
-	Containers       *SiteConfigContainer
-}
-
-type Scrape struct {
-	NewsSite NewsSite
-	URLS     map[string]string
-}
-
-type NewsSite struct {
-	Site         string
-	URL          string
-	TopHeadlines []*TopHeadlines
-}
-
-type TopHeadlines struct {
-	Title       string
-	Description string
-	AritcleURL  string
-	ImageURL    string
-}
+package scfg
 
 var urls map[string]string = map[string]string{
 	"google":             "https://www.google.com",
@@ -72,8 +26,23 @@ var urls map[string]string = map[string]string{
 	"yahoo":              "https://news.yahoo.com/",
 }
 
-func Sleep(t int, d time.Duration) {
-	time.Sleep(time.Duration(t) * d)
+type SiteConfigContainer struct {
+	TopHeadlinesContainer string
+}
+
+type ScrapeConfig struct {
+	TestQuery        func(...string) string
+	TitleQuery       string
+	DescriptionQuery string
+	URLQuery         string
+	ImageURLQuery    string
+	URL              string
+	URLPrefix        string
+	URLChopped       bool
+	Pagination       bool
+	PaginationQuery  string
+	WaitForLoad      bool
+	Containers       *SiteConfigContainer
 }
 
 func CNNConfig() *ScrapeConfig {
@@ -115,62 +84,4 @@ func ViceConfig() *ScrapeConfig {
 	}
 
 	return sc
-}
-
-func NewScrape() *Scrape {
-	s := &Scrape{}
-	s.URLS = urls
-	return s
-}
-
-func (s *Scrape) ScrapeTopHeadLines(c *colly.Collector, cfg *ScrapeConfig) (string, error) {
-	c.OnHTML(cfg.Containers.TopHeadlinesContainer, func(e *colly.HTMLElement) {
-		// w := io.Writer(os.Stdout)
-		// if err := html.Render(w, e.DOM.Nodes[0]); err != nil {
-		// 	fmt.Println(err)
-		// 	return
-		// }
-
-		// fmt.Println(w)
-
-		title := e.ChildText(cfg.TitleQuery)
-		description := e.ChildText(cfg.DescriptionQuery)
-		articleURL := e.ChildAttr(cfg.URLQuery, "href")
-		imageURL := e.ChildAttr(cfg.ImageURLQuery, "src")
-
-		if cfg.URLChopped {
-			if s := e.ChildAttr(cfg.URLQuery, "href")[0]; s == '/' {
-				articleURL = fmt.Sprintf("%s%s", cfg.URLPrefix, e.ChildAttr(cfg.URLQuery, "href"))
-			}
-		}
-
-		s.NewsSite.TopHeadlines = append(s.NewsSite.TopHeadlines, &TopHeadlines{
-			Title:       title,
-			Description: description,
-			AritcleURL:  articleURL,
-			ImageURL:    imageURL,
-		})
-	})
-
-	if cfg.Pagination {
-		c.OnHTML(cfg.PaginationQuery, func(h *colly.HTMLElement) {
-			t := h.ChildAttr("a", "href")
-			c.Visit(t)
-		})
-	}
-
-	c.OnRequest(func(r *colly.Request) {
-		s.NewsSite.Site = strings.Split(r.URL.Host, ".")[1]
-		s.NewsSite.URL = r.URL.String()
-	})
-
-	c.Visit(cfg.URL)
-	c.Wait()
-
-	bytes, err := json.Marshal(s.NewsSite)
-	if err != nil {
-		return "", err
-	}
-
-	return string(bytes), nil
 }

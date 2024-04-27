@@ -1,6 +1,6 @@
 module github.com/hnucamendi/json_parser_dynamodb/json_parser
 
-go 1.21.4
+go 1.22.2
 
 require (
 	github.com/aws/aws-lambda-go v1.41.0
