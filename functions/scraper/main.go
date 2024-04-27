@@ -1,3 +1,4 @@
+// lambda function to scrape news websites for headlines
 package main
 
 import (
