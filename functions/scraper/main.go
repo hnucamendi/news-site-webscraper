@@ -27,12 +27,8 @@ type TopHeadline struct {
 	ImageURL    string
 }
 
-func sendToSQS(json string) error {
-	sess := session.Must(session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"),
-	}))
-
-	ssmSvc := ssm.New(sess)
+func sendToSQS(jb []byte, s *session.Session) error {
+	ssmSvc := ssm.New(s)
 	param, err := ssmSvc.GetParameter(&ssm.GetParameterInput{
 		Name:           aws.String("/lambda/prod/ws-colly/ws-colly-lambda-sqs-url"),
 		WithDecryption: aws.Bool(true),
@@ -43,18 +39,19 @@ func sendToSQS(json string) error {
 
 	queueURL := *param.Parameter.Value
 
-	sqsSvc := sqs.New(sess)
+	sqsSvc := sqs.New(s)
 
 	_, err = sqsSvc.SendMessage(&sqs.SendMessageInput{
 		DelaySeconds: aws.Int64(10),
-		MessageBody:  aws.String(json),
+		MessageBody:  aws.String(string(jb)),
 		QueueUrl:     &queueURL,
 	})
 
 	return err
 }
 
-func scrapeTopHeadLines(c *colly.Collector, cfg *scfg.ScrapeConfig) (string, error) {
+func scrapeTopHeadLines(c *colly.Collector, cfg *scfg.ScrapeConfig) ([]byte, error) {
+	newsSites := &NewsSite{}
 	c.OnHTML(cfg.Containers.TopHeadlinesContainer, func(e *colly.HTMLElement) {
 		title := e.ChildText(cfg.TitleQuery)
 		description := e.ChildText(cfg.DescriptionQuery)
@@ -67,7 +64,7 @@ func scrapeTopHeadLines(c *colly.Collector, cfg *scfg.ScrapeConfig) (string, err
 			}
 		}
 
-		newsSites.TopHeadlines = append(newsSites.TopHeadlines, &TopHeadlines{
+		newsSites.TopHeadline = append(newsSites.TopHeadline, &TopHeadline{
 			Title:       title,
 			Description: description,
 			AritcleURL:  articleURL,
@@ -92,28 +89,31 @@ func scrapeTopHeadLines(c *colly.Collector, cfg *scfg.ScrapeConfig) (string, err
 
 	bytes, err := json.Marshal(newsSites)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return string(bytes), nil
+	return bytes, nil
 }
 
-func HandleRequest() (string, error) {
+func HandleRequest() error {
 	c := colly.NewCollector(colly.Async(true), colly.UserAgent("ws-colly"))
+	sess := session.Must(session.NewSession(&aws.Config{
+		Region: aws.String("us-east-1"),
+	}))
 
 	json, err := scrapeTopHeadLines(c, scfg.CNNConfig())
 	if err != nil {
 		fmt.Println(err)
-		return "", err
+		return err
 	}
 
-	err = sendToSQS(json)
+	err = sendToSQS(json, sess)
 	if err != nil {
 		fmt.Println(err)
-		return "", err
+		return err
 	}
 
-	return json, nil
+	return nil
 
 }
 
