@@ -1,19 +1,36 @@
-# resource "aws_iam_role" "ws_colly_lambda_role" {
-#   name               = "ws-colly-lambda-role"
-#   assume_role_policy = data.aws_iam_policy_document.ws_colly_lambda_policy.json
-# }
-#
-# data "aws_iam_policy_document" "ws_colly_lambda_policy" {
-#   statement {
-#     effect = "Allow"
-#     principals {
-#       type        = "Service"
-#       identifiers = ["lambda.amazonaws.com", "scheduler.amazonaws.com"]
-#     }
-#     actions = ["sts:AssumeRole"]
-#   }
-# }
-#
+#####################
+# Webscraper Lambda #
+#####################
+resource "aws_lambda_function" "ws_colly" {
+  function_name = "ws-colly"
+  filename      = "bootstrap.zip"
+  role          = aws_iam_role.ws_colly_role.arn
+  handler       = "main.HandleRequest"
+  runtime       = "provided.al2"
+  architectures  = ["arm64"]
+  environment {
+    variables = {
+      SQSqueueName = aws_sqs_queue.ws_colly_sqs_queue.url
+    }
+  }
+}
+
+resource "aws_iam_role" "ws_colly_role" {
+  name               = "ws-colly-role"
+  assume_role_policy = data.aws_iam_policy_document.ws_colly_policy.json
+}
+
+data "aws_iam_policy_document" "ws_colly_policy" {
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com", "scheduler.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
 # resource "aws_iam_policy" "ws_colly_lambda_sqs_send_message_policy" {
 #   name        = "ws_colly_lambda_sqs_send_message_policy"
 #   description = "Allows Lambda function to send messages to SQS queue"
@@ -37,19 +54,6 @@
 #   })
 # }
 #
-# resource "aws_lambda_function" "ws_colly_lambda" {
-#   function_name    = "ws-colly"
-#   s3_bucket        = aws_s3_bucket.lambda_package_zip_bucket.id
-#   s3_key           = "ws-colly-lambda/bootstrap.zip"
-#   role             = aws_iam_role.ws_colly_lambda_role.arn
-#   handler          = "main.HandleRequest"
-#   runtime          = "provided.al2"
-#     environment {
-#     variables = {
-#       SQSqueueName = aws_sqs_queue.ws_colly_sqs_queue.url
-#     }
-#   }
-# }
 #
 # resource "aws_cloudwatch_event_rule" "ws_colly_lambda_daily_event" {
 #   name                = "ws-colly-lambda-daily-event"
