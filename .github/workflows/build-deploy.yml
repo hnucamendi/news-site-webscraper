@@ -6,9 +6,9 @@ on:
     branches: [master]
 jobs:
   deploying-lambda:
-    - uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-lambda.yml@master
-      with:
-        runtime: 'Go'
-        runtime-version: '1.22'
-        function-name: 'ws-colly'
-        function-directory: './functions/scraper'
+    uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-lambda.yml@master
+    with:
+      runtime: 'Go'
+      runtime-version: '1.22'
+      function-name: 'ws-colly'
+      function-directory: './functions/scraper'
