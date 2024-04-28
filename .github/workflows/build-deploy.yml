@@ -5,14 +5,10 @@ on:
   pull_request:
     branches: [master]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy
-        uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-lambda.yml@master
-        with:
-          runtime: 'Go'
-          runtime-version: '1.22'
-          function-name: 'ws-colly'
-          function-directory: './functions/scraper'
+  deploying-lambda:
+    - uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-lambda.yml@master
+      with:
+        runtime: 'Go'
+        runtime-version: '1.22'
+        function-name: 'ws-colly'
+        function-directory: './functions/scraper'
