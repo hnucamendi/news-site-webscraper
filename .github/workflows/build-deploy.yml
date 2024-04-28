@@ -4,11 +4,30 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+permissions:
+  id-token: write
+  contents: read
 jobs:
-  deploying-lambda:
-    uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-lambda.yml@master
-    with:
-      runtime: 'Go'
-      runtime-version: '1.22'
-      function-name: 'ws-colly'
-      function-directory: './functions/scraper'
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@4
+      - name: Configure Credentials
+        uses: aws-actions/configure-aws-credentials
+        with:
+          aws-region: 'us-east-1'
+          role-to-assume: ${{secrets.AWS_ASSUME_ROLE}}
+      - name: Setup Go
+        uses: actions/setup-go@4
+        with:
+          go-version: '1.22'
+      - name: Build Go
+        run: |
+          cd functions/scraper
+          GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -o bootstrap main.go
+          zip -r bootstrap.zip bootstrap
+      - name: Deploy
+        run: |
+          aws lambda update-function-code \
+          --function-name ws-colly \
+          --zip-file fileb://bootstrap.zip
