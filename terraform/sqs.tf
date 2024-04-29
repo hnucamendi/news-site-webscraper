@@ -19,3 +19,7 @@ resource "aws_sqs_queue" "ws_colly_sqs_dead_queue" {
     Environment = "production"
    }
 }
+
+resource "aws_sqs_queue" "test" {
+  
+}
