@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@4
       - name: Configure Credentials
-        uses: aws-actions/configure-aws-credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: 'us-east-1'
           role-to-assume: ${{secrets.AWS_ASSUME_ROLE}}
