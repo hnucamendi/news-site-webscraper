@@ -1,0 +1,37 @@
+on:
+  workflow_call:
+    inputs:
+      enviornment:
+        description: 'AWS enviornment to deploy to'
+        required: true
+        type: string
+      artifact_key:
+        required: true
+        type: string
+      lambda_name:
+        description: 'Lamba to deploy'
+        required: true
+        type: string
+      gha_oidc_role_name:
+        description: 'IAM role for GHA to assume'
+        required: true
+        type: string
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  download_deploy_artifact:
+    name: Download and Deploy Artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confgure AWS Credectials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam:${{inputs.enviornment == 'production' && secrets.AWS_ACCOUNT_ID_PROD || secrets.AWS_ACCOUNT_ID_DEV}}:role/${{inputs.gha_oidc_iam_role_name}}
+      - name: Download Artifact
+        uses: actions/download-artifact@v4 \
+        with:
+          name: ${{ inputs.artifact_key }}
+      - name: Deploy Lambda
+        run: aws lambda update-function-code --function-name ${{inputs.lambda_name}} --zip-file "fileb://${{ihnputs.artifact_key}}"

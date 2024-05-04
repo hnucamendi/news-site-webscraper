@@ -1,0 +1,75 @@
+name: Package Go Lambda
+on:
+  workflow_call:
+    inputs:
+      is_deploy:
+        description: 'Should this trigger a deploy?'
+        type: boolean
+        default: false
+      ref:
+        description: 'Ref to overwrite GITHUB_REF'
+        type: string
+      runtime_version:
+        description: 'version of go to use'
+        type: string
+        required: true
+      subdirectory:
+        description: 'subdirectory to deploy'
+        type: string
+        required: false
+        default: '.'
+      outputs:
+        artifact_key:
+          description: 'The key of the zipped build artifact in GitHub'
+          value: ${{jobs.lint_test_build_package.outputs.zip_key}}
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  extract_ref:
+    name: Extract Referance
+    uses: ./.github/workflows/extract_ref.yml
+    with:
+      ref: ${{inputs.ref}}
+  lint_test_build_package:
+    name: Go fmt, Test, Package
+    runs-on: ubuntu-latest
+    needs: extract_ref
+    outputs:
+      zip_key: ${{steps.package_artifact.outputs.zip_key}}
+      zip_path: ${{steps.package_artifact.outputs.zip_path}}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{needs.extract_ref.outputs.ref}}
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-verison: ${{inputs.runtime_version}}
+      - name: Go Test
+        run: |
+          cd ${{inputs.subdirectory}}
+          go test -v .
+      - name: Go Build
+        run: "cd ${{inputs.subdirectory}}\nGOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -tags lambda.norpc -mod=vendor -o ./publish/bootstrap .\n  \n"
+      - id: package_artifact
+        name: package zip
+        run: |
+          publish_dir="${{inputs.subdirectory}}/publish"
+          cd $public_dir
+
+          zip_key="${{needs.extract_ref.outputs.short_ref}}.zip"
+          zip -Xor ${{zip_key}}
+
+          zip_path="${publish_dir}/${zip_key}"
+          echo "zip_path=${zip_path}" >> "$GITHUB_OUTPUT"
+          echo "zip_key=${zip_key}" >> "$GITHUB_OUTPUT"
+      - id: upload_zip
+        name: Upload Zip
+        if: ${{inputs.is_deploy == true }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{steps.package_artifact.outputs.zip_key}}
+          path: ${{steps.package_artifact.outputs.zip_path}}
+          retention-days: 1
