@@ -9,5 +9,5 @@ jobs:
       version_tag: "todo"
       environment: "development"
       lambda_name: "ws-colly"
-      runtime-version: "1.22"
+      runtime_version: "1.22"
       subdirectory: "."
