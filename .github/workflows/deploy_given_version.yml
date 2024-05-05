@@ -1,5 +1,7 @@
 name: Deploy Given Version
-on: deployment
+on:
+  release:
+    types: [published, prereleased]
 jobs:
   deploy-lambda:
     uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version.yml@master
