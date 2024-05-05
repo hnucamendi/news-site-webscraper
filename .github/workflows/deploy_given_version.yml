@@ -2,7 +2,7 @@ name: Deploy Given Version
 on: deployment
 jobs:
   deploy-lambda:
-    uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version.yml
+    uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version.yml@master
     with:
       version_tag: "todo"
       environment: "development"
