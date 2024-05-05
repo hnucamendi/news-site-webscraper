@@ -1,70 +1,16 @@
 name: Deploy Given Version
 on:
-  workflow_call:
-    inputs:
-      version_tag:
-        description: "Version to deploy"
-        type: string
-        required: true
-      environment:
-        description: "Enviornment to deploy to"
-        type: string
-        required: true
-      lambda_name:
-        description: "Lambda to Deploy"
-        type: string
-        required: true
-      runtime_version:
-        description: "runtime version to use"
-        type: string
-        required: true
-      gha_oidc_iam_role_name:
-        description: "IAM role for GHA to assume"
-        required: true
-        type: string
-        default: "TODO"
-      subdirectory:
-        description: "subdirectory to deploy"
-        required: true
-        type: string
-      append_env:
-        description: "Append enviornment to aws resource name?"
-        type: boolean
-        required: true
-        default: true
-    secrets:
-      AWS_ACCOUNT_ID_PROD:
-        required: true
-      AWS_ACCOUNT_ID_DEV:
-        required: true
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
 jobs:
-  validate_version_tags:
-    uses: ./.github/workflows/reusable_version_validator.yml
+  deploy-lambda:
+    uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version.yml
     with:
-      version_tag: ${{inputs.version_tag}}
-  checkout:
-    name: checkout
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-  go_test_package_artifact:
-  uses: ./.github/workflows/build-go.yml
-  with:
-    is_deploy: true
-    ref: ${{needs.validate_version_tag.outputs.ref}}
-    runtime_version: ${{inputs.runtime_version}}
-    subdirectory: ${{inputs.subdirectory}}
-  secrets: inherit
-  deploy:
-  name: Deploy to ${{inputs.enviornment}} (${{inputs.version_tag}})
-  needs: go_test_package_artifact
-  if: ${{always() && contains(needs.*.result, 'success') && !(contains(needs.*.result, 'failure'))}}
-  uses: ./.github/workflows/deploy.yml
-  with:
-    environment: ${{inputs.enviornment}}
-    artifact_key: ${{needs.go_test_package_artifact.outputs.artifact_key}}
-    lambda_name: ${{inputs.append_env && format('{0}-{1}', inputs.lambda_name, inputs.enviornment) || inputs.lambda_name}}
-    gha_oidc_iam_role_name: ${{inputs.gha_oidc_iam_role_name}}
-  secrets: inherit
+      version_tag: "todo"
+      environment: "development"
+      lambda_name: "ws-colly"
+      runtime-version: "1.22"
+      gha_oidc_iam_role_name: "todo"
+      subdirectory: "."
