@@ -10,4 +10,4 @@ jobs:
       environment: "development"
       lambda_name: "ws-colly"
       runtime_version: "1.22"
-      subdirectory: "."
+      subdirectory: "./functions/scraper"
