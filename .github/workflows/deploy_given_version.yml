@@ -2,6 +2,9 @@ name: Deploy Given Version
 on:
   release:
     types: [published, prereleased]
+permissions:
+  contents: read
+  id-token: write
 jobs:
   deploy-lambda:
     uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version-lambda.yml@master
