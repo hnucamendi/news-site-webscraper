@@ -6,7 +6,7 @@ jobs:
   deploy-lambda:
     uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version-lambda.yml@master
     with:
-      version_tag: "todo"
+      version_tag: ${{github.ref}}
       environment: "development"
       lambda_name: "ws-colly"
       runtime_version: "1.22"
