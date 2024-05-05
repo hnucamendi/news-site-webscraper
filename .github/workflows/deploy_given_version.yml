@@ -4,7 +4,7 @@ on:
     types: [published, prereleased]
 jobs:
   deploy-lambda:
-    uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version.yml@master
+    uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version-lambda.yml@master
     with:
       version_tag: "todo"
       environment: "development"
