@@ -1,0 +1,19 @@
+name: Deploy Given Version
+on:
+  release:
+    types: [published, prereleased]
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  deploy-lambda:
+    uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version-lambda.yml@master
+    with:
+      version_tag: ${{github.ref}}
+      environment: "development"
+      lambda_name: "ws-colly"
+      runtime_version: "1.22"
+      subdirectory: "./functions/scraper"
+    secrets:
+      AWS_ACCOUNT_ID_PROD: ${{secrets.AWS_ACCOUNT_ID_PROD}}
+      AWS_ACCOUNT_ID_DEV: ${{secrets.AWS_ACCOUNT_ID_DEV}}
