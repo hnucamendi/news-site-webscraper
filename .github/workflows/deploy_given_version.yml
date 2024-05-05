@@ -11,3 +11,6 @@ jobs:
       lambda_name: "ws-colly"
       runtime_version: "1.22"
       subdirectory: "./functions/scraper"
+    secrets:
+      AWS_ACCOUNT_ID_PROD: ${{secrets.AWS_ACCOUNT_ID_PROD}}
+      AWS_ACCOUNT_ID_DEV: ${{secrets.AWS_ACCOUNT_ID_DEV}}
