@@ -1,9 +1,5 @@
 name: Deploy Given Version
-on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
+on: deployment
 jobs:
   deploy-lambda:
     uses: hnucamendi/shared-gha-workflows/.github/workflows/deploy-given-version.yml
@@ -12,5 +8,4 @@ jobs:
       environment: "development"
       lambda_name: "ws-colly"
       runtime-version: "1.22"
-      gha_oidc_iam_role_name: "todo"
       subdirectory: "."
